@@ -13,7 +13,7 @@ from models.amenity import Amenity
 
 
 class DBStorage:
-    """ creating tables in environmental"""
+    """ Creating tables in environmental"""
     __engine = None
     __session = None
 
