@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" new class for sqlAlchemy """
+""" The new class for sqlAlchemy """
 from os import getenv
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import (create_engine)
@@ -14,71 +14,63 @@ from models.amenity import Amenity
 
 
 class DBStorage:
-    """ create tables in environmental"""
+    """ creating tables in environmental"""
     __engine = None
     __session = None
 
     def __init__(self):
         user = getenv("HBNB_MYSQL_USER")
         passwd = getenv("HBNB_MYSQL_PWD")
-        db = getenv("HBNB_MYSQL_DB")
+        myDB = getenv("HBNB_MYSQL_DB")
         host = getenv("HBNB_MYSQL_HOST")
-        env = getenv("HBNB_ENV")
+        myEnv = getenv("HBNB_ENV")
 
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                                      .format(user, passwd, host, db),
+                                      .format(user, passwd, host, myDB),
                                       pool_pre_ping=True)
 
-        if env == "test":
+        if myEnv == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """returns a dictionary
-        Return:
-            returns a dictionary of __object
-        """
-        dic = {}
+        """Returning a dictionary of __object"""
+        myDic = {}
         if cls:
             if type(cls) is str:
                 cls = eval(cls)
-            query = self.__session.query(cls)
-            for elem in query:
-                key = "{}.{}".format(type(elem).__name__, elem.id)
-                dic[key] = elem
+            myQuery = self.__session.query(cls)
+            for myElem in myQuery:
+                k = "{}.{}".format(type(myElem).__name__, myElem.id)
+                myDic[k] = myElem
         else:
-            lista = [State, City, User, Place, Review, Amenity]
-            for clase in lista:
-                query = self.__session.query(clase)
-                for elem in query:
-                    key = "{}.{}".format(type(elem).__name__, elem.id)
-                    dic[key] = elem
-        return (dic)
+            myList = [State, City, User, Place, Review, Amenity]
+            for c in myList:
+                myQuery = self.__session.query(c)
+                for myElem in myQuery:
+                    k = "{}.{}".format(type(myElem).__name__, myElem.id)
+                    myDic[k] = myElem
+        return (myDic)
 
     def new(self, obj):
-        """add a new element in the table
-        """
+        """Adding a new elem in the table"""
         self.__session.add(obj)
 
     def save(self):
-        """save changes
-        """
+        """Saving changes"""
         self.__session.commit()
 
     def delete(self, obj=None):
-        """delete an element in the table
-        """
+        """Deleting an elem in the table"""
         if obj:
             self.session.delete(obj)
 
     def reload(self):
-        """configuration
-        """
+        """The configuration"""
         Base.metadata.create_all(self.__engine)
-        sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        Session = scoped_session(sec)
-        self.__session = Session()
+        s = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        mySess = scoped_session(s)
+        self.__session = mySess()
 
-    def close(self):
-        """ calls remove()
-        """
+    def myClose(self):
+        """ Calling remove() """
         self.__session.close()
