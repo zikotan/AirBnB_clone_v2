@@ -23,13 +23,10 @@ class test_basemodel(unittest.TestCase):
         """
         Test pep8 format
         """
-        try:
-            pycostyle = pycodestyle.StyleGuide(quiet=True)
-            result = pycostyle.check_files(['models/base_model.py'])
-            self.assertEqual(result.total_errors, 0,
-                            "Found code style errors (and warnings).")
-        except FileNotFoundError as e:
-            print("An error occurred:", e)
+        pycostyle = pycodestyle.StyleGuide(quiet=True)
+        result = pycostyle.check_files(['models/base_model.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
     def setUp(self):
         """ """
